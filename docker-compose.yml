@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16.1-alpine
+#    expose:
+#      - "5433" # Publishes 5433 to other containers but NOT to host machine
+    ports:
+      - '5436:5432'
+    volumes:
+#      - ./db:/var/lib/postgresql/data
+      - ./scripts/init_database_local.sh:/docker-entrypoint-initdb.d/init.sh
+
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - PGUSER=postgres
+
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5

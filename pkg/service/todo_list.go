@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/sirupsen/logrus"
 	"ross146/todo-app"
 	"ross146/todo-app/pkg/repository"
 )
@@ -27,4 +28,12 @@ func (s *TodoListService) GetById(userId, listId int) (todo.TodoList, error) {
 
 func (s *TodoListService) Delete(userId, listId int) error {
 	return s.repo.Delete(userId, listId)
+}
+
+func (s *TodoListService) Update(userId, listId int, input todo.UpdateListInput) error {
+	if err := input.Validate(); err != nil {
+		return err
+	}
+	logrus.Debug("11111")
+	return s.repo.Update(listId, userId, input)
 }
